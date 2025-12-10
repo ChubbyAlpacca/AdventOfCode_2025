@@ -7,7 +7,6 @@ import (
 	"strings"
 )
 
-// const inputFilePath = "data/test_input.txt"
 const inputFilePath = "data/full_input.txt"
 
 
@@ -27,9 +26,6 @@ func main() {
 	}
 	fmt.Print("Input data recieved => \n" + string(data) + "\n\n\n\n")
 	formattedData := formatInputData(data)
-	// We'll detect numbers that are exact repeats of their first half
-	// (e.g. "11", "1010", "446446", "1188511885").
-	// Each formatted entry may be a single number or a range like "11-22".
 	var totalRepeatedSum int64 = 0
 	totalRepeatedCount := 0
 
@@ -40,7 +36,6 @@ func main() {
 		}
 		fmt.Printf("Entry %d: %s\n", i, entry)
 
-		// handle ranges a-b or single numbers
 		if strings.Contains(entry, "-") {
 			parts := strings.SplitN(entry, "-", 2)
 			if len(parts) != 2 {
@@ -53,7 +48,6 @@ func main() {
 				fmt.Println("  invalid range numbers:", entry)
 				continue
 			}
-			// normalize
 			if start64 > end64 {
 				start64, end64 = end64, start64
 			}
@@ -72,7 +66,6 @@ func main() {
 			totalRepeatedCount += entryCount
 			totalRepeatedSum += entrySum
 		} else {
-			// single number (or ID string)
 			s := entry
 			if isRepeatedSequence(s) {
 				v, err := strconv.ParseInt(s, 10, 64)
@@ -92,14 +85,12 @@ func main() {
 	fmt.Printf("  total sum of repeated-half numeric IDs: %d\n", totalRepeatedSum)
 }
 
-// isRepeatedSequence returns true if s is formed by repeating a shorter
-// sequence of digits at least twice (e.g. "11", "1010", "123123", "1111111").
+
 func isRepeatedSequence(s string) bool {
 	L := len(s)
 	if L < 2 {
 		return false
 	}
-	// try all pattern lengths that divide L and are at most L/2
 	for p := 1; p <= L/2; p++ {
 		if L%p != 0 {
 			continue

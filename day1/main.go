@@ -12,7 +12,6 @@ const inputFilePath = "data/full_input.txt"
 var counter int = 0
 
 func createLockDial(min, max int) []int {
-	// include both endpoints
 	length := max - min + 1
 	if length <= 0 {
 		return []int{}
@@ -32,11 +31,7 @@ func formatInputData(data []byte) []string {
 	return strings.Split(s, "\n")
 }
 
-// applyRotation applies a single rotation instruction to the current
-// dial position and returns the new position and whether it is zero.
-// applyRotation applies a single rotation instruction to the current
-// dial position and returns the new position, whether it landed on zero,
-// and how many times the rotation passed over zero during the move.
+
 func applyRotation(pos int, instruction string) (int, bool, int) {
 	const N = 100
 	instruction = strings.TrimSpace(instruction)
@@ -54,11 +49,7 @@ func applyRotation(pos int, instruction string) (int, bool, int) {
 	var passes int
 	switch cmd {
 	case "L":
-		// moving left decreases position
-		// newPos computed with wrap-around
 		newPos = ((pos-amt)%N + N) % N
-		// count number of times we passed zero while moving left
-		// find first k in 1..amt with pos - k ≡ 0 (mod N)
 		k0 := pos
 		if k0 == 0 {
 			k0 = N
@@ -70,7 +61,6 @@ func applyRotation(pos int, instruction string) (int, bool, int) {
 		}
 	case "R":
 		newPos = (pos + amt) % N
-		// find first k in 1..amt with pos + k ≡ 0 (mod N)
 		k0 := N - pos
 		if k0 == 0 {
 			k0 = N
@@ -89,7 +79,6 @@ func applyRotation(pos int, instruction string) (int, bool, int) {
 
 func solveProblem(data []byte) string {
 	formattedData := formatInputData(data)
-	// dial starts at 50
 	pos := 50
 	counter = 0
 	passCount := 0
@@ -112,9 +101,6 @@ func main() {
 	fmt.Print("Input data recieved => \n" + string(data) + "\n\n\n\n")
 	result := solveProblem(data)
 	fmt.Printf("%s\n", result)
-	// print both counters: landings and passes
-	// passCount is not stored globally; recompute to print both cleanly
-	// We'll re-run to compute passCount alongside counter.
 	formatted := formatInputData(data)
 	pos := 50
 	totalPasses := 0
